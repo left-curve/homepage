@@ -1,4 +1,6 @@
 {
   "html.format.extraLiners": "",
-  "html.format.indentInnerHtml": true
+  "html.format.indentInnerHtml": true,
+  "html.format.wrapLineLength": 0,
+  "css.format.newlineBetweenSelectors": false
 }
