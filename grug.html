@@ -10,15 +10,125 @@
       #grug {
         max-width: 12rem;
       }
+
+      #abstract {
+        font-size: 1.5rem;
+        font-family: sans-serif;
+      }
     </style>
   </head>
   <body>
     <div class="mb-1">
       ⬅️ <a href="index.html">back to homepage</a>
     </div>
-    <div class="text-center">
+    <div class="text-center mb-1">
       <img id="grug" alt="grug" src="grug.jpg">
       <h1>Grug</h1>
     </div>
+    <p id="abstract" class="mb-1">
+      Grug is an execution environment for blockchains. It's an alternative to the EVM, Solana VM, Move, and CosmWasm.
+    </p>
+    <h2 class="mt-2">Characteristics</h2>
+    <hr class="mb-1">
+    <p class="mb-1">
+      Grug is much faster than single-threaded EVM, but probably not as fast as SVM or Move (they are the results of multiple years of grinding by extremely well-funded teams; we can't compete with that).
+    </p>
+    <p class="mb-1">
+      Instead, Grug differentiates itself by its <b>rich features</b>. The idea is that there're many apps that are difficult to build in EVM, SVM, Move, etc. because those VMs lack certain features that these apps rely on, but they will be easy to build with Grug. Such features include:
+    </p>
+    <h3 class="mb-1">🦀 Wasm smart contracts written in Rust</h3>
+    <p class="mb-1">
+      We explicitly make the choice to NOT invent a new language, in contrary to what some of our competitors do (Solidity, Move, Fuel). Inventing a new language means you have to reinvent all the tooling, rewrite and re-audit all the libraries; not worth it.
+    </p>
+    <p class="mb-1">
+      Furthermore, your compiler probably won't be very good. A compiler is a tremendously complex piece of software; a domain-specific language, with its limited user base, is unlikely to have the resources to spend on perfecting it. This is why we often see Solidity devs resorting to writing assembly code - the compiler simply isn't capable of producing gas-efficient programs.
+    </p>
+    <p class="mb-1">
+      Grug smart contracts are written in Rust, <a href="https://www.reddit.com/r/rust/comments/149cu1k/2023_stack_overflow_survey_rust_is_the_most/">the most admired programming language 8 years in a row</a>, and compile to WebAssembly (Wasm).
+    </p>
+    <p class="mb-1">
+      While calling contracts, Grug uses <a href="https://wasmer.io/">Wasmer</a>, a highly optimized Wasm runtime that utilizes a just-in-time (JIT) compiler to achieve <a href="https://medium.com/wasmer/benchmarking-webassembly-runtimes-18497ce0d76e">near native performance</a>, which can be 10-100x cheaper computation and up to 100-500x cheaper memory usage compared to single-threaded EVM, according to <a href="https://docs.arbitrum.io/stylus/concepts/stylus-gas#stylus-gas-costs">benchmarks</a> done by Arbitrum, which also uses Wasmer for its <a href="https://arbitrum.io/stylus">Stylus</a> framework.
+    </p>
+    <p class="mb-1">
+      Wasm is also supported by all modern web browsers. This opens up new possibilities for frontend develpement (check out <a href="https://www.youtube.com/live/xe1iQ-FHviY?t=5755">this presentation</a>).
+    </p>
+    <p class="mb-1">
+      Another cool thing about using Rust/Wasm is that it often gets better without us having to do anything. For instance, the Rust 1.63 release reduces compiled contract sizes <a href="https://x.com/simon_warta/status/1565454352701169664">by up to 40%</a>. We reap the benefit from numerous contributors outside of the crypto space, an luxury that domain-specific languages don't have.
+    </p>
+    <h3 class="mb-1">🪪 Smart accounts</h3>
+    <p class="mb-1">
+      While it took Ethereum almost 4 years to ship <a href="https://eips.ethereum.org/EIPS/eip-3074">EIP-3074</a>, Grug comes packaged with a complete smart account solution from the get-go.
+    </p>
+    <p class="mb-1">
+      This solution builds on previous works by our founder Larry, who created <a href="https://github.com/larry0x/abstract-account">the very first smart account solution in Cosmos</a>, which is used by <a href="https://x.com/burnt_xion">Xion</a> to onboard 100k users, processing 1100 TPS without any hiccup.
+    </p>
+    <p class="mb-1">
+      Our solution allows one to program smart contract accounts that authenticate transactions with arbitrary logics as the developer likes. This can include <a href="https://passkey.org/">Passkey</a>, one-time password, two-factor authentication, and so on.
+    </p>
+    <p class="mb-1">
+      We believe the endgame wallet experience is a key-less one. The user will, for example, generate and store a private key in their iCloud so that it's accessible from any device, and sign transactions with fingerprint and Face ID. Our smart account solution enables this.
+    </p>
+    <p class="mb-1">
+      Another use case uniquely enabled by our smart account solution is <b>credit account</b>, a DeFi primitive <a href="https://forum.marsprotocol.io/t/a-generalized-credit-protocol-utilizing-mars-lending-market/598">conceived</a> by our founder Larry. It allows users to take uncollateralized margin loans, something not possible with traiditonal lending protocols such as Compound and Aave. Credit accounts are also cross-margin, meaning one can take on multiple activities within the account: spot trading, futures trading, yield farming... which will collateralize each other (capital efficient).
+    </p>
+    <p class="mb-1">
+      Credit account is possible thanks to two innovations: 1) the account will back-run each transaction, rejecting it if the actions result in the health factor dropping below a threshold; and 2) a liquidation mecanism is built into the account. While it's not impossible to implement these in traditional VMs (see similar works by <a href="https://marsprotocol.io/">Mars</a> and <a href="https://gearbox.fi/">Gearbox</a> protocols), they tend to suffer from high complexity (a lot of workarounds are necessary due to lack of a smart account system), poor user experience (e.g. credit accounts are not "real" accounts hence won't show up in wallet apps), and high gas cost. Grug can easily reduce the codebase size by 80%, be much cheaper, and offer good UX.
+    </p>
+    <h3 class="mb-1">⛽ Customizable gas metering and fees</h3>
+    <p class="mb-1"></p>
+    <h3 class="mb-1">📥 Customizable transaction ordering and vote extension</h3>
+    <p class="mb-1"></p>
+    <h3 class="mb-1">⏲️ Cronjobs</h3>
+    <p class="mb-1"></p>
+    <h3 class="mb-1">🪙 A new token standard that just makes sense</h3>
+    <p class="mb-1"></p>
+    <h3 class="mb-1">🛰️ Cosmos IBC</h3>
+    <p class="mb-1"></p>
+    <h3 class="mb-1">🧑‍💻 More quality of life improvements for developers…</h3>
+    <p class="mb-1"></p>
+    <h2 class="mt-2">Sequencing</h2>
+    <hr class="mb-1">
+    <p class="mb-1">
+      To create a fully functioning blockchain, couple Grug with a <b>sequencing layer</b>. If you couple it with a layer-1 consensus protocol, you get an L1 chain; couple it with a layer-2 sequencer, you get an L2 chain.
+    </p>
+    <p class="mb-1">
+      Grug talks with the sequencing layer through the <a href="https://docs.cometbft.com/v0.37/spec/abci/">Application-Blockchain Interface (ABCI)</a>. Any ABCI-compatible sequcing solution should work, such as:
+    </p>
+    <ul>
+      <li>
+        <a href="https://github.com/cometbft/cometbft">CometBFT</a>
+      </li>
+      <li>
+        <a href="https://union.build/docs/architecture/cometbls/">CometBLS</a>
+      </li>
+      <li>
+        <a href="https://github.com/skip-mev/block-sdk">Block SDK</a>
+      </li>
+      <li>
+        <a href="https://rollchains.com/">Rollchains</a>
+      </li>
+      <li>
+        <a href="https://github.com/dymensionxyz/dymint">Dymint</a>
+      </li>
+      <li>
+        ABCI wrapper of <a href="https://github.com/ethereum-optimism/optimism/tree/develop/op-node">op-node</a> (WIP by <a href="https://x.com/Polymer_Labs">Polymer</a> team)
+      </li>
+    </ul>
+    <h2 class="mt-2">Future plans</h2>
+    <hr class="mb-1">
+    <p class="mb-1">
+      Grug V1 won't come with <b>verifiable computation</b>; our team set this aside for now and focus on shipping some apps first. Eventually though, we plan to make Grug ZK-provable utilizing one of the zkVMs: <a href="https://x.com/RiscZero">RiscZero</a>, <a href="https://x.com/SuccinctLabs">SP1</a>, <a href="https://github.com/a16z/jolt">Jolt</a>, <a href="https://x.com/fluentxyz">Fluent</a>, or <a href="https://x.com/nil_foundation">zkLLVM</a>.
+    </p>
+    <p class="mb-1">
+      Besides these, we will also investigate <b>state eviction</b>, which a solution to state bloating, believed to be <a href="https://www.youtube.com/watch?v=Cmuz_Xn_YJw">the greatest obstacle for Ethereum scaling</a>. Our solution will be similar to what is proposed in the <a href="https://developers.diem.com/docs/technical-papers/the-diem-blockchain-paper/">Diem whitepaper</a> (see section 4.4).
+    </p>
+    <p>
+      We will also investigate <b>parallel transaction processing</b> using <a href="https://arxiv.org/abs/2203.06871">Block-STM</a>.
+    </p>
+    <h2 class="mt-2">Source code</h2>
+    <hr class="mb-1">
+    <p>
+      <a href="https://github.com/left-curve/grug">GitHub link</a>
+    </p>
   </body>
 </html>
