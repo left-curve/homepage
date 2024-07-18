@@ -51,26 +51,10 @@ h1, h2, h3, h4, h5, h6, p, ol, ul {
   text-align: center;
 }
 
-.text-red {
-  color: red;
-}
-
-.text-blue {
-  color: blue;
-}
-
 /* https://developer.mozilla.org/en-US/docs/Web/CSS/box-sizing */
 .box {
   box-sizing: border-box;
   width: 100%;
   border: 1px solid black;
   padding: 1rem;
-}
-
-.border-red {
-  border-color: red;
-}
-
-.border-blue {
-  border-color: blue;
 }
