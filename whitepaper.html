@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Grug</title>
+    <link rel="stylesheet" href="main.css">
+    <style>
+      #logo {
+        margin: 0 auto 40px auto;
+        max-width: 300px;
+        text-align: center;
+      }
+      #logo img {
+        max-width: 100%;
+      }
+      #text {
+        font-size: 1.2em;
+        margin: auto;
+        max-width: 650px;
+      }
+      #abstract {
+        margin-bottom: 40px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <a href="index.html"><i>Back</i></a>
+    </header>
+    <div id="logo">
+      <img src="grug-laptop-color.svg">
+      <img src="grug-text.svg">
+    </div>
+    <div id="text">
+      <h2 id="abstract">
+        Grug is an execution environment for blockchains. It's an alternative to the EVM, Solana VM, Move, and CosmWasm.
+      </h2>
+      <h2>Characteristics</h2>
+      <p>
+        Grug is much faster than single-threaded EVM, but probably not as fast as SVM or Move (they are the results of multiple years of grinding by extremely well-funded teams; we can't compete with that).
+      </p>
+      <p>
+        Instead, Grug differentiates itself by its <b>rich features</b>. The idea is that there're many apps that are difficult to build in EVM, SVM, Move, etc. because those VMs lack certain features that these apps need, but they will be easy to build with Grug. Such features include:
+      </p>
+      <h3>Smart accounts</h3>
+      <p>
+        While it took Ethereum almost 4 years to ship <a href="https://eips.ethereum.org/EIPS/eip-3074">EIP-3074</a>, Grug comes packaged with a complete smart account solution from the get go.
+      </p>
+      <p>
+        This solution builds on our previous work of <a href="https://github.com/larry0x/abstract-account">the very first smart account solution in Cosmos</a>, which is used by <a href="https://x.com/burnt_xion">Xion</a> to onboard 100k users, processing 1100 TPS without any hiccup.
+      </p>
+      <p>
+        Our solution allows one to program smart contract accounts that authenticate transactions with arbitrary logics as the developer likes. This can include <a href="https://passkey.org/">Passkey</a>, one-time password, two-factor authentication, and so on.
+      </p>
+      <p>
+        We believe the endgame wallet experience is a key-less one. The user will, for example, generate and store a private key in their iCloud so that it's accessible from any device, and sign transactions with fingerprint and Face ID. Our smart account solution enables this.
+      </p>
+      <p>
+        Another use case uniquely enabled by our smart account solution is a new DeFi primitive called <a href="https://forum.marsprotocol.io/t/a-generalized-credit-protocol-utilizing-mars-lending-market/598">credit account</a>. It allows users to take uncollateralized<sup id="footnote-1-origin"><a href="#footnote-1">[1]</a></sup> margin loans, something not possible with traiditonal lending protocols such as Compound and Aave. Credit accounts are also cross-margin, meaning one can take on multiple activities within the account: spot trading, futures trading, yield farming... which will collateralize each other (capital efficient).
+      </p>
+      <p>
+        Credit account is possible thanks to two innovations: 1) the account will backrun each transaction, rejecting it if the actions result in the health factor dropping below a threshold; and 2) a liquidation mecanism is built into the account. While it's not impossible to implement these in traditional VMs (see similar works by <a href="https://marsprotocol.io/">Mars</a> and <a href="https://gearbox.fi/">Gearbox</a> protocols), they tend to suffer from high complexity (a lot of workarounds are necessary due to lack of a smart account system), poor user experience (e.g. credit accounts are not "real" accounts hence won't show up in wallet apps), and high gas cost. Grug can easily reduce the codebase size by 80%, be much cheaper, and offer good UX.
+      </p>
+      <h3>Customizable gas fees</h3>
+      <p>
+        A guideline we employ in designing Grug is that <i>if we expect developers may want to customize something, then this thing should be abstracted into a smart contract; if it's something that we don't expect any developer to ever want to customize, then it will be native Rust code</i>. With this, developers never have to fork chain-level code to achieve their objectives. All they need to do is to write contracts.
+      </p>
+      <p>
+        This is in contrary to the EVM, in that, for example, if you don't like the floating gas price in EIP-1559 and want a flat price instead, you will have to fork and change the core Ethereum protocol. This is risky and beyond the capability of most developers.
+      </p>
+      <p>
+        In Grug, gas fees are managed by a smart contract, nicknamed the <b>taxman</b>. After each transaction, taxman is invoked and provided with a report of the transaction and its gas consumption. Developers can implement any logic to handle the fee, for example:
+      </p>
+      <ul>
+        <li>
+          burn the fee
+        </li>
+        <li>
+          distribute the fee to stakers
+        </li>
+        <li>
+          discounted gas price for holders of a certain NFT
+        </li>
+        <li>
+          if the transaction is placing a limit order, then hold the fee; only charge it if the order is filled; refund if canceled
+        </li>
+      </ul>
+      <p>
+        Additionally, if at any time the community wishes to change the fee mechanism, they don't have to harkfork the chain. All that's necessary is to migrate the contract.
+      </p>
+      <p>
+        Another interesting use case is that since taxman backruns every transaction, it's possible to use it to capture protocol-owned MEV, similar to Osmosis' <a href="https://docs.osmosis.zone/overview/features/protorev/">ProtoRev</a> module.
+      </p>
+      <h3>Cronjobs</h3>
+      <p>
+        A cronjob is an operation that needs to be performed at regular time intervals. For instances,
+      </p>
+      <ul>
+        <li>
+          a perpetual futures protocol needs to update its funding rate once in a while based on long/short open interests
+        </li>
+        <li>
+          an orderbook DEX needs to match buy and sell orders at the end of each block
+        </li>
+        <li>
+          a dollar cost averaging (DCA) service needs to carry out the buy/sell operations for the user at regular intervals
+        </li>
+      </ul>
+      <p>
+        In EVM, developers need to rely on bots to carry out these, since actions can only be triggered by submitting transactions. Relying on offline infrastrucutre such as a bot network increases operating cost and are susceptible to network congestions as discussed in the previous section.
+      </p>
+      <p>
+        The Cosmos SDK pioneered a solution to this known as the <a href="https://docs.cosmos.network/v0.50/build/building-modules/beginblock-endblock">Begin/EndBlocker</a>. Essentially, developers can create actions to be performed automatically at the beginning or the end of each block, without manual invocation. Since these actions are not triggered by transactions, they do not suffer from congestions.
+      </p>
+      <p>
+        In Grug, we borrow the idea of Begin/EndBlockers, giving smart contracts access to them.
+      </p>
+      <h3>A new token standard</h3>
+      <p>
+        ERC-20 is a terrible token standard. It's bad for users, bad for developers, bad for indexers. Literally no one likes it, but Ethereum is stuck with it for eternity since numerous DeFi apps already depend on it.
+      </p>
+      <p>
+        A few reasons why ERC-20 is so bad:
+      </p>
+      <ul>
+        <li class="mb-1">
+          You can only transfer one token per transaction.
+        </li>
+        <li class="mb-1">
+          It's not possible to send tokens to a contract then atomically call a method on that contract. This feature is termed <code>transferAndCall</code> and is available on several other token standards such as ERC-677, but they are not widely adopted; even if they are, you can still only transfer one token at a time, so for use cases where it's necessary to transfer two or more tokens then call the contract (e.g. providing liquidity to an AMM) this doesn't work.
+        </li>
+        <li class="mb-1">
+          To solve the previous problem, the <code>approval</code> mechanism was invented. This however created massive security risks. Many apps have users make infinite approvals in order to save on gas, but this also means in case the app is exploited, users' funds can be infinitely stolen.
+        </li>
+        <li class="mb-1">
+          The recipient can't reject a token transfer. There has been numerous cases where users mistakenly send tokens to a contract which are irreversibly lost. EVM allows contract to implement a <code>receive</code> function, in which the contract can reject transfers, but it only works for ETH, not ETH-20s.
+        </li>
+        <li class="mb-1">
+          Given an account, it's impossible to find all ERC-20s it holds. This is because token balances aren't stored in a single location, but rather in thousands of separate contracts. Developers first need an archive node to parse all contract deployment history to build a list of all ERC-20s in existence, then make a query at each and every of them to find the user's balance. That's a ridiculous amount of work for such a basic task.
+        </li>
+        <li>
+          Given an ERC-20, it's impossible to find all accounts that hold the token. Instead, developers need access to an archive node and index historical mint/burn/transfer events. The lack of this feature has its root in Ethereum's choice of Merkle Patricia Tree and thus isn't fixable.
+        </li>
+      </ul>
+      <p>
+        Grug's native token standard fixes all these issues except for the last one (we can do it, but doing so increases state size a lot and as far as I'm concerned, isn't worth it). Furthermore, it unifies fungible tokens and NFTs under a single standard, borrowing ideas from <a href="https://docs.osmosis.zone/osmosis-core/modules/tokenfactory/">Osmosis</a> and <a href="https://www.metaplex.com/">Metaplex</a>.
+      </p>
+      <h3>Cosmos IBC</h3>
+      <p>
+        <a href="https://www.ibcprotocol.dev/">IBC</a> is the best interoperability protocol (if you disagree, you're wrong). Grug enshrines IBC natively as part of the VM.
+      </p>
+      <p>
+        On the business side, having IBC allows us to easily onboard USDC holders from any ecosystem though Circle's <a href="https://www.circle.com/en/cross-chain-transfer-protocol">CCTP</a> and <a href="https://nobleassets.xyz/">Noble</a>.
+      </p>
+      <h3>More quality of life improvements for developers…</h3>
+      <ul>
+        <li class="mb-1">
+          <b>Multicall</b>: Whereas in EVM, each transaction can only make a single contract call, Grug allows you to compose as many actions into a single transaction (as long as they fit in the block gas limit).
+        </li>
+        <li class="mb-1">
+          <b>Iteration</b>: In EVM, it is not possible to iterate data in a <code>mapping</code> data structure. The lack of this capability means developers often have to implement complex workarounds just to create simple functionalities. In Grug, iteration is natively supported thanks to our <a href="https://github.com/cosmos/cosmos-sdk/blob/main/docs/architecture/adr-065-store-v2.md">innovative approach of handling chain state</a>.
+        </li>
+        <li class="mb-1">
+          <b>Null type</b>: EVM does not have the <code>null</code> type. That is, if a contract says a number is zero, it's impossible to tell whether this number is indeed zero, or that it's simply uninitiated. This ambiguity is a huge security pitfall. Grug supports null type (or rather, Rust supports null type and Grug just gets it for free).
+        </li>
+        <li class="mb-1">
+          <b>Upgradability</b>: In Grug, contracts migration is supported natively by the VM. It's no longer necessary to rely on the complex and error-prune <a href="https://docs.openzeppelin.com/upgrades-plugins/1.x/proxies">proxy pattern</a> as in EVM.
+        </li>
+        <li class="mb-1">
+          <b>Readability</b>: Calldata in Grug are in JSON, a schema-less and human-readable format, while contract states are encoded in <a href="https://github.com/near/borsh">Borsh</a>, a compact and performance scheme.
+        </li>
+        <li>
+          Reentrancy attack is <a href="https://docs.cosmwasm.com/docs/architecture/smart-contracts#avoiding-reentrancy-attacks">made impossible</a> by design in Grug.
+        </li>
+      </ul>
+      <h2>The choice of Rust and WebAssembly</h2>
+      <p>
+        We explicitly make the choice to NOT invent a new language, in contrary to what some of our competitors do (Solidity, Move, Fuel). Inventing a new language means you have to reinvent all the tooling, rewrite and re-audit all the libraries; not worth it.
+      </p>
+      <p>
+        Furthermore, your compiler probably won't be very good. A compiler is a tremendously complex piece of software; a domain-specific language, with its limited user base, is unlikely to have the resource to spend on perfecting it. This is why we often see Solidity devs resorting to writing assembly code - the compiler simply isn't capable of producing gas-efficient bytecodes.
+      </p>
+      <p>
+        Grug smart contracts are written in Rust, <a href="https://www.reddit.com/r/rust/comments/149cu1k/2023_stack_overflow_survey_rust_is_the_most/">the most admired programming language 8 years in a row</a>, and compile to WebAssembly (Wasm).
+      </p>
+      <p>
+        While calling contracts, Grug uses <a href="https://wasmer.io/">Wasmer</a>, a highly optimized Wasm runtime that utilizes a just-in-time (JIT) compiler to achieve <a href="https://medium.com/wasmer/benchmarking-webassembly-runtimes-18497ce0d76e">near native performance</a>, which can be 10-100x cheaper in computation and up to 100-500x cheaper in memory usage compared to single-threaded EVM, according to <a href="https://docs.arbitrum.io/stylus/concepts/stylus-gas#stylus-gas-costs">benchmarks</a> done by Arbitrum, which also uses Wasmer for its <a href="https://arbitrum.io/stylus">Stylus</a> framework.
+      </p>
+      <p>
+        Wasm is also supported by all modern web browsers. This opens up new possibilities for frontend develpement (check out <a href="https://www.youtube.com/live/xe1iQ-FHviY?t=5755">this presentation</a>).
+      </p>
+      <p>
+        Another cool thing about using Rust/Wasm is that it often gets better without us having to do anything. For instance, the Rust 1.63 release reduces compiled contract sizes <a href="https://x.com/simon_warta/status/1565454352701169664">by up to 40%</a>. We enjoy the contributions from numerous Rust/Wasm users outside of the crypto space, a luxury that domain-specific languages don't have.
+      </p>
+      <h2>Sequencing</h2>
+      <p>
+        To create a fully functioning blockchain, Grug needs to be coupled with a <b>sequencing layer</b>. If you couple it with a layer-1 consensus protocol, you get an L1 chain; couple it with a layer-2 sequencer, you get an L2 chain.
+      </p>
+      <p>
+        Grug talks with the sequencing layer through the <a href="https://docs.cometbft.com/v0.37/spec/abci/">Application-Blockchain Interface (ABCI)</a>. Any ABCI-compatible sequcing solution should work, such as:
+      </p>
+      <ul>
+        <li>
+          <a href="https://github.com/cometbft/cometbft">CometBFT</a>
+        </li>
+        <li>
+          <a href="https://union.build/docs/architecture/cometbls/">CometBLS</a>
+        </li>
+        <li>
+          <a href="https://github.com/skip-mev/block-sdk">Block SDK</a>
+        </li>
+        <li>
+          <a href="https://rollchains.com/">Rollchains</a>
+        </li>
+        <li>
+          <a href="https://github.com/dymensionxyz/dymint">Dymint</a>
+        </li>
+        <li>
+          ABCI wrapper of <a href="https://github.com/ethereum-optimism/optimism/tree/develop/op-node">op-node</a> (WIP by <a href="https://x.com/Polymer_Labs">Polymer</a> team)
+        </li>
+      </ul>
+      <h2>Future plans</h2>
+      <p>
+        Grug V1 won't come with <b>verifiable computation</b>; our team set this aside for now and focus on shipping some apps first. Eventually though, we plan to make Grug ZK-provable utilizing one of the zkVMs: <a href="https://x.com/RiscZero">RiscZero</a>, <a href="https://x.com/SuccinctLabs">SP1</a>, <a href="https://github.com/a16z/jolt">Jolt</a>, <a href="https://x.com/fluentxyz">Fluent</a>, or <a href="https://x.com/nil_foundation">zkLLVM</a>.
+      </p>
+      <p>
+        Besides these, we will also investigate <b>state eviction</b>, which is a solution to state bloating, believed to be <a href="https://www.youtube.com/watch?v=Cmuz_Xn_YJw">the greatest obstacle for Ethereum scaling</a>. Our solution will be similar to what is proposed in the <a href="https://developers.diem.com/docs/technical-papers/the-diem-blockchain-paper/">Diem whitepaper</a> (§4.4).
+      </p>
+      <p>
+        We will also investigate <b>parallel transaction processing</b> using <a href="https://arxiv.org/abs/2203.06871">Block-STM</a>.
+      </p>
+      <h2>Acknowledgment</h2>
+      <p>
+        Grug is heavily inspired by <a href="https://cosmwasm.com/">CosmWasm</a>, both in architecture design and in borrowing actual code (in compliance with the Apache-2.0 license). It's safe to say that Grug simply won't exist without the pioneering work by CosmWasm. Our big thanks to the CosmWasm creators.
+      </p>
+      <h4>Footnotes</h4>
+      <ol>
+        <li id="footnote-1">
+          The legally more rigorous term is <a href="https://x.com/lex_node/status/1542214455517388803">lien</a>. The loan is in fact fully collateralized, it's just that the borrower still has fully control over the collateral. This is similar to how a car loan or a mortgage works. <a href="#footnote-1-origin">[^]</a>
+        </li>
+      </ol>
+    </div>
+    <footer>
+      <a href="mailto:gm@larry.engineer"><i>Email</i></a>
+      &nbsp;&nbsp;
+      <a href="https://x.com/leftCurveSoft"><i>Twitter</i></a>
+      &nbsp;&nbsp;
+      <a href="https://github.com/left-curve/grug"><i>GitHub</i></a>
+    </footer>
+  </body>
+</html>
