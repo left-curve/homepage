@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta property="og:title" content="Dango: the next-gen DeFi hub">
+    <meta property="og:description" content="A DeFi hub with novel leverage capabilities and a true next-gen user experience.">
+    <meta property="og:image" content="https://grug.build/images/dango-open-graph.webp">
+    <meta property="og:url" content="https://grug.build">
+    <meta property="og:type" content="website">
+    <meta name="twitter:title" content="Dango: the next-gen DeFi hub">
+    <meta name="twitter:description" content="A DeFi hub with novel leverage capabilities and a true next-gen user experience.">
+    <meta name="twitter:image" content="https://grug.build/images/dango-open-graph.webp">
+    <title>Dango</title>
+    <link rel="stylesheet" href="main.css">
+    <link rel="icon" href="images/favicon.svg">
+    <style>
+      p, li {
+        line-height: 1.5;
+      }
+      li {
+        margin-bottom: 8px;
+      }
+      img {
+        max-width: 100%;
+      }
+      .separator {
+        color: gray;
+        text-align: center;
+      }
+      #text {
+        font-size: 1.2em;
+        margin: 0 auto;
+        max-width: 650px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <a href="index.html"><i>Back</i></a>
+    </header>
+    <div id="text">
+      <img src="images/1-cover.webp">
+      <h2>
+        We’re launching a new chain called 🍡 <b>Dango</b>!
+      </h2>
+      <p>
+        It will be a DeFi hub with novel leverage capabilities and a true next-gen user experience.
+      </p>
+      <ul>
+        <li>
+          <a href="https://dango.zone/">Website</a>
+        </li>
+        <li>
+          <a href="https://x.com/dango_zone">Twitter</a>
+        </li>
+        <li>
+          <a href="https://discord.gg/9ysGzSAVPr">Discord</a>
+        </li>
+      </ul>
+      <p>
+        Dango is uniquely positioned, because we purposely design & build our own infra with use case and UX in mind: <b>app-driven infra development</b>. This allows us to <b>do things our competitors can’t</b>, and makes <b>our product harder to replicate</b>.
+      </p>
+      <p>
+        Let’s discuss specifically what problems users are facing today, and Dango’s solutions to them.
+      </p>
+      <p>
+        <i>This article outlines our <b>current</b> plans and thoughts on Dango, which may change as development goes on.</i>
+      </p>
+      <h2>
+        A DEX with new capabilities
+      </h2>
+      <p>
+        Finance is the art of matching the needs of two groups of people: <b>the risk seekers</b> who look for higher margin opportunities, and <b>the risk avoiders</b> who seek less volatile sources of yield.
+      </p>
+      <p>
+        In TradFi, the two groups are connected by intermediaries such as banks and brokerages.
+      </p>
+      <p>
+        An intermediary would take a deposit from the risk avoider, and lend it as margin to the risk seeker, who would use it to trade. The intermediary would ensure the loan is safe by means of liquidations. The risk seeker would pay an interest on the margin, which is routed back to the risk avoider, after the intermediary took a cut.
+      </p>
+      <p>
+        Both parties get what they want – a win-win situation.
+      </p>
+      <p>
+        <i>Does DeFi, in its current state, serve them well?</i> Our assessment is no.
+      </p>
+      <p>
+        Consider how a risk seeker would use DeFi to go levered long on their $100 worth of Bitcoin. They would deposit WBTC into Aave, borrow up to $73 USDC,<sup id="footnote-1-origin"><a href="#footnote-1">[1]</a></sup> and swap the USDC to WBTC. This achieves a 1.73x leverage at most, lower than what most traders desire (3-10x).
+      </p>
+      <p>
+        You can achieve ~3.7x leverage through “looping”,<sup id="footnote-2-origin"><a href="#footnote-2">[2]</a></sup> but that’s hardly a feasible solution for 99% of the users due to complexity and gas cost.
+      </p>
+      <p>
+        The lack of the capability to trade spot at sufficient leverage is why we think perpetual futures have taken most of this space’s mindshare.
+      </p>
+      <p>
+        Perps are not perfect though:
+      </p>
+      <ul>
+        <li>
+          an orderbook-based, peer-to-peer perp can deviate from the market price if parameters aren’t properly chosen;
+        </li>
+        <li>
+          an oracle-based, peer-to-pool perp requires a pool of liquidity providers to take the counterparty position, who are at risk of unbounded loss if traders on aggregate win.
+        </li>
+      </ul>
+      <p>
+        And of course, for traders who only want moderate leverage (2-3x), perp funding rates can be more expensive than the margin rates they can get from CEXs.
+      </p>
+      <p>
+        As DeFi fails to serve the risk seeker, it also fails the risk avoiders by missing out on less volatile yield opportunities for them.
+      </p>
+      <div class="separator">
+        · · ·
+      </div>
+      <p>
+        Dango aims to fix this with a new primitive, the <b>margin account</b>. Pioneered by <a href="https://x.com/GearboxProtocol">Gearbox</a> and <a href="https://x.com/mars_protocol">Mars Protocol</a>, perfected at Dango.
+      </p>
+      <img src="images/2-margin-account.webp">
+      <p>
+        Here’s how the aforementioned risk seeker would use our margin account to achieve their goal: they would deposit $100 BTC into their margin account, borrow $200 of USDC, and swap those to BTC. That’s a 3x leverage.
+      </p>
+      <p>
+        What does this mean for the risk avoider? Well, the margin account now has $300 of assets backing $200 of liabilities – fully collateralized. That’s as safe as lending on Aave, while there are $200 generating yield for you instead of $73.
+      </p>
+      <p>
+        What’s even better, the margin account is <b>cross-collateralized</b>, meaning you can undertake various activities with your margin account: trade spot, trade perps, trade options, lend, yield farm… which all contribute to an account-level health factor.
+      </p>
+      <p>
+        Want to segregate your assets and reduce risk? Just open another spot or margin account. You can open any many accounts you want.
+      </p>
+      <p>
+        To start with, <b>Dango will ship 3 apps</b>, providing leverage for risk seekers and ample yield opportunities for risk avoiders:
+      </p>
+      <ul>
+        <li>
+          <b>the margin account</b>
+        </li>
+        <li>
+          <b>a spot DEX</b>
+        </li>
+        <li>
+          <b>a perp DEX</b>
+        </li>
+      </ul>
+      <p>
+        Post-launch, we expect to see 3rd party apps deployed on Dango and utilize the margin account system.
+      </p>
+      <h2>
+        No one left out
+      </h2>
+      <p>
+        Another group of users that DeFi has failed to serve is holders of BTC, BCH, LTC, DOGE, XRP, TRX, ADA… they have not been meaningfully connected to mainstream DeFi.
+      </p>
+      <p>
+        DeFi natives often dismiss these chains as “dinosaurs”, but truth is they still have many billions of dollars of mcap and significant volume, which make CEXs absolutely swimming in revenue that DeFi has failed to capture.
+      </p>
+      <p>
+        Here at Dango, we will work on connecting every chain via various bridge technologies:
+      </p>
+      <ul>
+        <li>
+          Ethereum and EVM L2s, Solana, Move ecosystem, and Near via <a href="https://x.com/union_build">Union</a>;
+        </li>
+        <li>
+          Cosmos ecosystem via <a href="https://x.com/IBCProtocol">IBC</a>;
+        </li>
+        <li>
+          Bitcoin and others: we’re exploring implementing our own MPC/TSS bridge. Alternatively we may use existing solutions such as <a href="https://x.com/THORChain">THORChain</a>.
+        </li>
+      </ul>
+      <img src="images/3-bridging.webp">
+      <p>
+        You will be able to deposit native (not wrapped) BTC directly to Dango, just like how you’d do with Binance or Coinbase.
+      </p>
+      <p>
+        Our goal is to leave no one out.
+      </p>
+      <h2>
+        Actually good UX
+      </h2>
+      <p>
+        Our goal is to achieve a UX comparable to that of CEXs. We see 3 prerequisites in making this happen:
+      </p>
+      <ul>
+        <li>
+          a novel account system
+        </li>
+        <li>
+          an integrated UI
+        </li>
+        <li>
+          a user-friendly fee scheme
+        </li>
+      </ul>
+      <p>
+        At Dango, we take <b>a key-less and wallet-less approach</b> for our UX, made possible by our unique account system.
+      </p>
+      <img src="images/4-account-system.webp">
+      <p>
+        When signing up, instead of generating a seed phrase, you will choose a human-readable username, such as @Larry, as you would do when signing up for Twitter or Instagram.
+      </p>
+      <p>
+        This username is onchain, representing your identity and reputation.
+      </p>
+      <p>
+        Under this username, on the one hand, you can open accounts: spot accounts, margin accounts, or multisigs.
+      </p>
+      <p>
+        On the other hand, you can add any number of authentication methods – Passkeys, legacy wallets (MetaMask, Phantom, Backpack, Keplr), or hardware keys (Ledger, YubiKey).
+      </p>
+      <p>
+        You can send transactions from any of your accounts signed by any of the authenticators associated with your username.
+      </p>
+      <p>
+        <b>Dango does not have a browser extension wallet.</b> Instead, we take <b>a Passkey-first approach</b>.
+      </p>
+      <p>
+        In modern electronic devices, Passkeys are stored in a secure enclave and synchronized across devices. You will be able to seamlessly create a Passkey on a Mac, and sign transactions on an iPhone using Face ID.
+      </p>
+      <p>
+        Sync’ing between devices of different families (e.g. iPhone <> Windows PCs) is more challenging, but doable – we will make this simple for you.
+      </p>
+      <p>
+        We believe <b>this is the best UX for 99% of the users out there</b>. For the remaining 1%, you can always fallback to an authentication methods of your choice.
+      </p>
+      <div class="separator">
+        · · ·
+      </div>
+      <p>
+        Something we hate about DeFi in its current form, is the <b>fragmentated UX</b> – to swap some tokens, go to uniswap.exchange; to borrow or lend, go to aave.com; to trade perps, or buy shitcoins, or do something else, go to 10 other different websites…
+      </p>
+      <p>
+        Dango, instead, runs on <b>a single integrated UI</b>, the <b>Dango Portal</b>. In this single UI you will onboard, manage your accounts, deposit or withdraw assets, and interact with every app on the chain.
+      </p>
+      <img src="images/5-applets.webp">
+      <p>Every use case on Dango is abstracted as an <b>“applet”</b>:</p>
+      <ul>
+        <li>
+          account creation – an applet
+        </li>
+        <li>
+          bridging – an applet
+        </li>
+        <li>
+          trading spot, on margin, or perps – an applet
+        </li>
+        <li>
+          earn yield – an applet
+        </li>
+        <li>
+          manage portfolio – an applet
+        </li>
+        <li>
+          block explorer – an applet
+        </li>
+        <li>
+          help center – an applet
+        </li>
+      </ul>
+      <p>
+        The source code of applets are stored onchain, and served on-demand in a decentralized manner.
+      </p>
+      <p>
+        Discover apps through our <b>Spotlight search bar</b>. Want to swap tokens? Type anything related such as “buy”, “sell”, “swap”, “trade”, “convert”… Spotlight will understand your intent and take you to the right applet.
+      </p>
+      <img src="images/6-launcher.webp">
+      <p>
+        At launch, listing apps in the Dango Portal will be permissioned – just like the original iPhone only came with 1st party apps from Apple. This is necessary to ensure a safe and high quality UX. We’d rather have a handful of good apps, than a thousand poorly made or scammy apps.
+      </p>
+      <p>
+        Gradually, we plan to open up app listing – just like the iPhone did.
+      </p>
+      <p>
+        For 3rd party builders, we believe Spotlight will be a great venue for distributing your apps, gaining exposure and mindshare.
+      </p>
+      <p>
+        We work extremely hard with top UI/UX designers to ensure a high quality and coherent experience across all applets. Our goal: <b>anything you want to do, you don’t have to leave the Portal; everything you do, there’s a consistent and polished experience</b>.
+      </p>
+      <div class="separator">
+        · · ·
+      </div>
+      <p>
+        Dango operates on a <b>USDC standard</b>. This means you will use USDC to pay for gas; assets will be paired with USDC in the DEX; yields will be paid in USDC.
+      </p>
+      <img src="images/7-usdc.webp">
+      <p>
+        Of course, we’re fully aware that USDC is a centralized asset. However, its benefits far outweigh the drawback, with no alternative coming even close:
+      </p>
+      <ul>
+        <li>
+          It’s <b>a stablecoin</b>. Users like to pay fees in a stablecoin, and understand their portfolio value in terms of a stable asset.
+        </li>
+        <li>
+          It’s <b>a truly omni-chain asset</b>. Using ETH as native currency? You leave out all Solana users. They’d have to download MetaMask and get ETH into their wallet, before being able to use Dango. With USDC, we can onboard users from everywhere, thanks to the CCTP protocol.
+        </li>
+      </ul>
+      <p>
+        The best part of this, is we don’t need to do any BD in order to get native USDC, thanks to <a href="https://x.com/noble_xyz">Noble</a> and <a href="https://x.com/IBCProtocol">Cosmos IBC</a>!
+      </p>
+      <h2>The Dango chain</h2>
+      <p>
+        Dango will be an L1 blockchain utilizing our own smart contract engine, <a href="whitepaper.html">Grug</a>, running on top of the Tendermint consensus protocol.
+      </p>
+      <img src="images/8-tech-stack.webp">
+      <p>
+        Dango will have a <b>proof of authority validator set</b> of ~20 nodes, selected by the Left Curve Foundation (LCF), based on cost and reputation, among other factors.
+      </p>
+      <p>
+        This setup is similar to that of Binance Smart Chain. If BSC is secure enough for you to ape in, Dango should be good too.
+      </p>
+      <p>
+        The validators have <b>no power in governance</b>, take <b>no delegation of tokens</b>, and earn <b>no revenue from onchain sources</b>. We think these things are distractions from the things users care about, and thus are better avoided.
+      </p>
+      <p>
+        Instead, validators simply bill the LCF for operating costs, while 100% of captured value goes to token holders and affiliate marketers (more on this later).
+      </p>
+      <div class="separator">
+        · · ·
+      </div>
+      <p>
+        We’re aiming to launch Dango with <b>0.5 second block time</b>.
+      </p>
+      <p>
+        Thanks to Tendermint, Dango blocks have <b>instant finality</b>- meaning your transactions will be confirmed within no longer than 1 block of time (unlike on Solana where you have to wait a few seconds, despite block time being 400 ms), and that withdrawals are immediately honored.
+      </p>
+      <div class="separator">
+        · · ·
+      </div>
+      <p>
+        Dango can process close to 2,000 transactions per second (TPS). The sheer amount of TPS is never our focus, and 2K should be sufficient for our short term goals.
+      </p>
+      <p>
+        Onwards, if more throughput is needed, we have a few tricks up our sleeves, namely: Diem’s Block-STM, Monad’s MonadDB, Avalanche’s Firewood, and Sei’s mmap and optimistic block building – we take inspirations from the brightest minds in the web3 space.
+      </p>
+      <h2>
+        The Dango token
+      </h2>
+      <p>
+        Dango’s token is <b>DNG</b>, with a total supply of 30,000.
+      </p>
+      <img src="images/9-token.webp">
+      <p>
+        DNG will accrue value from:
+      </p>
+      <li>
+        gas fees
+      </li>
+      <li>
+        spot market trading fees<sup id="footnote-3-origin"><a href="#footnote-3">[3]</a></sup>
+      </li>
+      <li>
+        perp market trading fees<sup><a href="#footnote-3">[3]</a></sup>
+      </li>
+      <li>
+        liquidation fees
+      </li>
+      <p>
+        As is the case for most tech startups, we think at this stage it’s more important to capture market share than to extract value. At a later time, DNG holders can vote to turn on the fee switch.
+      </p>
+      <p>
+        There won’t be any staking mechanism. Our assessment is user don’t like to stake or lockup tokens. Instead, <b>100% of fees collected will be used to buy back & burn</b> DNG.
+      </p>
+      <p>
+        The exception to this is users onboarded via <b>referral links</b>. 50% of all fees they pay in the first 4 years since signing up go to the affiliates who referred them.
+      </p>
+      <div class="separator">
+        · · ·
+      </div>
+      <p>
+        Our goal for the distribution of DNG is <b>at least half of total supply should go to the community</b> (non-insiders); among which <b>as much as possible should be liquid at TGE</b>.
+      </p>
+      <p>
+        While subject to change, our current plan for tokenomics is:
+      </p>
+      <ul>
+        <li>
+          30% – ICO<sup id="footnote-4-origin"><a href="#footnote-4">[4]</a></sup>
+        </li>
+        <li>
+          15% – lockdrop<sup><a href="#footnote-4">[4]</a></sup>
+        </li>
+        <li>
+          15% – liquidity incentives (to be released over over 4 years)
+        </li>
+        <li>
+          15% – team
+        </li>
+        <li>
+          15% – investors
+        </li>
+        <li>
+          5% – service providers (e.g. advisors, launchpad)
+        </li>
+        <li>
+          5% – foundation
+        </li>
+      </ul>
+      <img src="images/10-tokenomics.webp">
+      <p>
+        We plan to do an <b>ICO</b> that is in compliance with the MiCA framework. 30% of the token supply will be available to European residents and we think much of the rest of the world, depending on regulatory clarity.
+      </p>
+      <p>
+        We will do a <b>lockdrop</b>, which is an event where participants lock up assets in Dango’s AMM, margin pool, or perp counterparty pool for a chosen amount of time, in exchange for tokens. Allocation scales superlinearly with the lockup period to compensate for risks involved.
+      </p>
+      <p>
+        <b>There is no plan for any airdrop, incentivized testnet, or points program.</b> The only ways to acquire DNG is to participate in ICO or lockdrop during TGE, or yield farm post-TGE.
+      </p>
+      <h2>
+        When?
+      </h2>
+      <p>
+        We’re expecting to launch Dango <b>Chaosnet</b> in Q3 of 2025.
+      </p>
+      <img src="images/11-timeline.webp">
+      <p>
+        The word Chaosnet is chosen to highlight the fact that Dango is highly experimental technology – there will probably be unrefined UX, bugs here and there… “chaos”.
+      </p>
+      <p>
+        Once the tech is matured and proven, Dango will transition into its <b>Mainnet</b>.
+      </p>
+      <p>
+        Onwards from here, as development progresses, we will release <b>a series of public demo-nets</b>, each with incrementally more features.
+      </p>
+      <p>
+        We’re expecting <b>demonet-1 some time after New Year</b>, equipped with our account system, oracle, and a basic spot DEX.
+      </p>
+      <h2>
+        To builders
+      </h2>
+      <p>
+        I encourage you to consider building on Dango:
+      </p>
+      <ul>
+        <li>
+          Grug allows you to create apps not possible in other VMs;
+        </li>
+        <li>
+          your app can plug into our margin account system – super useful especially if you’re building anything involving leverage; and
+        </li>
+        <li>
+          Spotlight can be a great venue for distributing your app.
+        </li>
+      </ul>
+      <p>
+        We probably won’t have a grant program, which has proven ineffective in nurturing a loyal dev community. However, <b>as founder, I will do everything within reasonable limits to support you</b>. This includes reviewing your code, paying for your audits, review your pitch deck, connecting you with investors, or even getting in the trenches writing code if that helps you meet your goals.
+      </p>
+      <p>
+        I’m sure you don’t get support like this from any other ecosystem! You’re important to us, and I want to make sure you’re treated as such.
+      </p>
+      <h2>
+        Backers
+      </h2>
+      <p>
+        Dango is supported by a $3.6M seed round co-led by <a href="https://x.com/Lemniscap">Lemniscap</a> and <a href="https://x.com/hack_vc">Hack VC</a>, with participation by <a href="https://www.cherry.xyz/">Cherry Crypto</a>, <a href="https://x.com/interopvc">Interop</a>, <a href="https://x.com/publicworksfm">Public Works</a>, <a href="https://x.com/delphi_labs">Delphi Labs</a>,<sup><a href="#footnote-5">[5]</a></sup> and more… Thank you!!
+      </p>
+      <img src="images/12-backers.webp">
+      <h2>
+        That’s all!
+      </h2>
+      <p>
+        Thank you for reading, and stay tuned by following <a href="https://x.com/dango_zone">our Twitter account</a>, and joining <a href="https://discord.gg/9ysGzSAVPr">our Discord server</a>!
+      </p>
+      <h4>
+        Footnotes
+      </h4>
+      <ol>
+        <li id="footnote-1">
+          WBTC’s <a href="https://app.aave.com/reserve-overview/?underlyingAsset=0x2260fac5e5542a773aa44fbcfedf7c193bc2c599&marketName=proto_mainnet_v3">max LTV</a> is 73.00%, meaning for each $100 of WBTC you can borrow up to $73 of debt. <a href="#footnote-1-origin">[^]</a>
+        </li>
+        <li id="footnote-2">
+          Calculated as: 1 / (1 - 73%) = 3.7 (this, btw, is the same formula for the <a href="https://en.wikipedia.org/wiki/Fractional-reserve_banking#Formula">money supply multiplier</a> of fractional reserve banking.) <a href="#footnote-2-origin">[^]</a>
+        </li>
+        <li id="footnote-3">
+          These will have their rates set to zero at launch. <a href="#footnote-3-origin">[^]</a>
+        </li>
+        <li id="footnote-4">
+          To be fully liquid at TGE, while the rest subject to a multi-year unlocking with cliff. <a href="#footnote-4-origin">[^]</a>
+        </li>
+        <li id="footnote-5">
+          Not Delphi Ventures, which is a different entity. <a href="#footnote-4-origin">[^]</a>
+        </li>
+      </ol>
+    </div>
+    <footer>
+      <a href="mailto:larry@leftcurve.io"><i>Email</i></a>
+      &nbsp;&nbsp;
+      <a href="https://x.com/leftCurveSoft"><i>Twitter</i></a>
+      &nbsp;&nbsp;
+      <a href="https://github.com/left-curve/left-curve"><i>GitHub</i></a>
+    </footer>
+  </body>
+</html>
