@@ -73,10 +73,10 @@
         We believe the endgame wallet experience is a key-less one. The user will, for example, generate and store a private key in their iCloud so that it's accessible from any device, and sign transactions with fingerprint and Face ID. Our smart account solution enables this.
       </p>
       <p>
-        Another use case uniquely enabled by our smart account solution is a new DeFi primitive called <a href="https://forum.marsprotocol.io/t/a-generalized-credit-protocol-utilizing-mars-lending-market/598">credit account</a>. It allows users to take uncollateralized<sup id="footnote-1-origin"><a href="#footnote-1">[1]</a></sup> margin loans, something not possible with traiditonal lending protocols such as Compound and Aave. Credit accounts are also cross-margin, meaning one can take on multiple activities within the account: spot trading, futures trading, yield farming... which will collateralize each other (capital efficient).
+        Another use case uniquely enabled by our smart account solution is a new DeFi primitive called <a href="https://forum.marsprotocol.io/t/a-generalized-credit-protocol-utilizing-mars-lending-market/598">credit account</a>. It allows users to take uncollateralized<sup id="footnote-1-origin"><a href="#footnote-1">[1]</a></sup> margin loans, something not possible with traditonal lending protocols such as Compound and Aave. Credit accounts are also cross-margin, meaning one can take on multiple activities within the account: spot trading, futures trading, yield farming... which will collateralize each other (capital efficient).
       </p>
       <p>
-        Credit account is possible thanks to two innovations: 1) the account will backrun each transaction, rejecting it if the actions result in the health factor dropping below a threshold; and 2) a liquidation mecanism is built into the account. While it's not impossible to implement these in traditional VMs (see similar works by <a href="https://marsprotocol.io/">Mars</a> and <a href="https://gearbox.fi/">Gearbox</a> protocols), they tend to suffer from high complexity (a lot of workarounds are necessary due to lack of a smart account system), poor user experience (e.g. credit accounts are not "real" accounts hence won't show up in wallet apps), and high gas cost. Grug can easily reduce the codebase size by 80%, be much cheaper, and offer good UX.
+        Credit account is possible thanks to two innovations: 1) the account will backrun each transaction, rejecting it if the actions result in the health factor dropping below a threshold; and 2) a liquidation mechanism is built into the account. While it's not impossible to implement these in traditional VMs (see similar works by <a href="https://marsprotocol.io/">Mars</a> and <a href="https://gearbox.fi/">Gearbox</a> protocols), they tend to suffer from high complexity (a lot of workarounds are necessary due to lack of a smart account system), poor user experience (e.g. credit accounts are not "real" accounts hence won't show up in wallet apps), and high gas cost. Grug can easily reduce the codebase size by 80%, be much cheaper, and offer good UX.
       </p>
       <h3>Customizable gas fees</h3>
       <p>
@@ -184,7 +184,7 @@
           <b>Upgradability</b>: In Grug, contracts migration is supported natively by the VM. It's no longer necessary to rely on the complex and error-prune <a href="https://docs.openzeppelin.com/upgrades-plugins/1.x/proxies">proxy pattern</a> as in EVM.
         </li>
         <li class="mb-1">
-          <b>Readability</b>: Calldata in Grug are in JSON, a schema-less and human-readable format, while contract states are encoded in <a href="https://github.com/near/borsh">Borsh</a>, a compact and performance scheme.
+          <b>Readability</b>: Calldata in Grug are in JSON, a schema-less and human-readable format, while contract states are encoded in <a href="https://github.com/near/borsh">Borsh</a>, a compact and performant scheme.
         </li>
         <li>
           Reentrancy attack is <a href="https://docs.cosmwasm.com/docs/architecture/smart-contracts#avoiding-reentrancy-attacks">made impossible</a> by design in Grug.
